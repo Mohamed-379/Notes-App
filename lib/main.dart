@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/ui/home.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
