@@ -1,102 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/constants.dart';
-import 'customTextFeild.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:notes_app/cubits/add_note_cubit/add_note_cubit.dart';
+import 'create_note_form.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   const CustomBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 18),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       child: SingleChildScrollView(
-        child: CreateNoteForm(),
-      ),
-    );
-  }
-}
-
-class CreateNoteForm extends StatefulWidget {
-  const CreateNoteForm({super.key});
-  
-
-  @override
-  State<CreateNoteForm> createState() => _CreateNoteFormState();
-}
-
-class _CreateNoteFormState extends State<CreateNoteForm> {
-
-  String? title, description;
-  GlobalKey<FormState> formKey = GlobalKey();
-  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      autovalidateMode: autoValidateMode,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 28,
-          ),
-          CustomTextField(
-            onSaved: (value) {
-              value = title;
-            },
-            hintText: "Title",
-            maxLines: 1,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          CustomTextField(
-            onSaved: (value) {
-              value = description;
-            },
-            hintText: "Description",
-            maxLines: 5,
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          CreateNoteButton(onTap: () {
-            if(formKey.currentState!.validate()){
-              formKey.currentState!.save();
-            }else{
-              autoValidateMode = AutovalidateMode.always;
+        child: BlocConsumer<AddNoteCubit, AddNoteState>(
+          listener: (context, state) {
+            if (state is AddNoteFailure) {
+              print('failed ${state.errMessage}');
             }
-            setState(() {});
-          },),
-          const SizedBox(
-            height: 24,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-class CreateNoteButton extends StatelessWidget {
-  const CreateNoteButton({super.key, required this.onTap});
-
-  final void Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: 55,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: kPrimaryColor,
-          borderRadius: BorderRadius.circular(8),
+            if (state is AddNoteSuccess) {
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            return ModalProgressHUD(
+                inAsyncCall: state is AddNoteLoading ? true : false,
+                child: const CreateNoteForm());
+          },
         ),
-        child: const Center(
-            child: Text(
-          "Save",
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        )),
       ),
     );
   }
