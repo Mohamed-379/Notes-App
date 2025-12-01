@@ -13,7 +13,8 @@ class NoteModel extends HiveObject{
   final int color;
 
   NoteModel(
-      {required this.title,
+      {
+      required this.title,
       required this.description,
       required this.date,
       required this.color});
