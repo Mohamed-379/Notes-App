@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/ui/widgets/edit_note_item.dart';
 
 class NoteItem extends StatelessWidget {
-  const NoteItem({super.key});
+  const NoteItem({super.key, required this.note});
+
+  final NoteModel note;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EditNoteItem(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditNoteItem(),));
       },
       child: Container(
         margin: const EdgeInsets.only(top: 16),
@@ -18,10 +21,10 @@ class NoteItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              title: const Text(
-                "Watch English Course",
-                style: TextStyle(
-                    fontSize: 24,
+              title: Text(
+                note.title,
+                style: const TextStyle(
+                    fontSize: 22,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
@@ -31,9 +34,9 @@ class NoteItem extends StatelessWidget {
                   top: 24,
                 ),
                 child: Text(
-                  "vocabularies, Grammar, ",
+                  note.description,
                   style: TextStyle(
-                      fontSize: 19, color: Colors.black.withOpacity(0.5)),
+                      fontSize: 18, color: Colors.black.withOpacity(0.5)),
                 ),
               ),
               trailing: IconButton(
@@ -41,15 +44,15 @@ class NoteItem extends StatelessWidget {
                   icon: const Icon(
                       Icons.delete,
                       color: Colors.black,
-                      size: 28
+                      size: 24
                   )),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 30, bottom: 25),
               child: Text(
-                "October 31, 2025",
+                note.date,
                 style: TextStyle(
-                    fontSize: 18, color: Colors.black.withOpacity(0.5)),
+                    fontSize: 14, color: Colors.black.withOpacity(0.5)),
               ),
             ),
           ],
