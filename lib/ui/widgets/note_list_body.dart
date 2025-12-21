@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:notes_app/cubits/notes_cubit/notes_cubit.dart';
-import '../../constants.dart';
-import '../../models/note_model.dart';
 import 'custom_appbar.dart';
 import 'note_listView.dart';
 
@@ -31,10 +28,7 @@ class _NoteListBodyState extends State<NoteListBody> {
           CustomAppBar(
             title: "Note App",
             icon: Icons.search_rounded,
-            onPress: () async {
-              var noteBox = Hive.box<NoteModel>(kNotesBox);
-              await noteBox.clear();
-              },
+            onPress: (){},
           ),
           const NoteListview()
         ],
